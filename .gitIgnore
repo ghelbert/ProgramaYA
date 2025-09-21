@@ -1,0 +1,5 @@
+bin/
+obj/
+ProgramaYA.sln
+Data/Migrations/
+wwwroot/
