@@ -1,8 +1,192 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "ProgramaYA";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <style>
+        :root {
+            --teal-color: #0d9488;
+            --teal-dark: #0f766e;
+        }
+
+        .bg-teal {
+            background-color: var(--teal-color) !important;
+        }
+
+        .bg-teal-dark {
+            background-color: var(--teal-dark) !important;
+        }
+
+        .text-teal {
+            color: var(--teal-color) !important;
+        }
+
+        .btn-teal {
+            background-color: var(--teal-color);
+            border-color: var(--teal-color);
+            color: white;
+        }
+
+        .btn-teal:hover {
+            background-color: var(--teal-dark);
+            border-color: var(--teal-dark);
+            color: white;
+        }
+
+        .hexagon {
+            width: 64px;
+            height: 64px;
+            background-color: #22c55e;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+
+        .course-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .main-bg {
+            background: linear-gradient(135deg, var(--teal-color) 0%, var(--teal-dark) 100%);
+            min-height: 100vh;
+        }
+    </style>
+}
+
+<!-- Main Content -->
+<main class="main-bg">
+    <div class="container py-5">
+        <!-- Welcome Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                ¡BIENVENIDO A ProgramaYA!
+            </h1>
+        </div>
+
+        <!-- New Courses Section -->
+        <div id="carouselExampleControlsNoTouching" class="carousel slide w-100 border border-black" data-bs-touch="false">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://static.platzi.com/media/blog/nueva-version-nodejs-npm-41d0c683-dd57-4540-92f2-daff88ec661d.png"
+                        class="d-block w-100" alt="">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://angular.dev/assets/images/ng-image.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://facialix.com/wp-content/uploads/2023/05/react-blog.jpg" class="d-block w-100"
+                        alt="...">
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControlsNoTouching"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControlsNoTouching"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            <div class="container">
+                <div class="row text-bg-success fs-1 fw-bold w-100 ">
+                    <p class="text-center">
+                        NUEVOS CURSOS
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Courses Section -->
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <h2 class="text-center text-teal fw-bold mb-5">CURSOS MÁS POPULARES</h2>
+
+                <div class="row g-4">
+                    <!-- .NET Course -->
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="card border-2 border-secondary-subtle p-4 mb-3">
+                                <div class="course-icon bg-primary">
+                                    <span class="text-white fw-bold fs-5">.NET</span>
+                                </div>
+                            </div>
+                            <div class="bg-teal text-white py-2 px-3 rounded-pill d-inline-block mb-3">
+                                <small class="fw-bold">.NET - BÁSICO</small>
+                            </div>
+                            <br>
+                            <a href="@Url.Action("Details", "Courses", new { id = "dotnet-basico" })"
+                                class="btn btn-teal fw-bold px-4 py-2">
+                                IR AL CURSO
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Python Course -->
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="card border-2 border-secondary-subtle p-4 mb-3">
+                                <div class="course-icon d-flex align-items-center justify-content-center">
+                                    <i class="fab fa-python text-primary" style="font-size: 4rem;"></i>
+                                </div>
+                            </div>
+                            <div class="bg-teal text-white py-2 px-3 rounded-pill d-inline-block mb-3">
+                                <small class="fw-bold">PYTHON - BÁSICO</small>
+                            </div>
+                            <br>
+                            <a href="@Url.Action("Details", "Courses", new { id = "python-basico" })"
+                                class="btn btn-teal fw-bold px-4 py-2">
+                                IR AL CURSO
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Java Course -->
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="card border-2 border-secondary-subtle p-4 mb-3">
+                                <div class="course-icon d-flex align-items-center justify-content-center">
+                                    <i class="fab fa-java text-danger" style="font-size: 4rem;"></i>
+                                </div>
+                            </div>
+                            <div class="bg-teal text-white py-2 px-3 rounded-pill d-inline-block mb-3">
+                                <small class="fw-bold">JAVA - BÁSICO</small>
+                            </div>
+                            <br>
+                            <a href="@Url.Action("Details", "Courses", new { id = "java-basico" })"
+                                class="btn btn-teal fw-bold px-4 py-2">
+                                IR AL CURSO
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        // Simple carousel functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.addEventListener('click', function () {
+                // Implement previous courses logic
+                console.log('Previous courses');
+            });
+
+            nextBtn.addEventListener('click', function () {
+                // Implement next courses logic
+                console.log('Next courses');
+            });
+        });
+    </script>
+}
