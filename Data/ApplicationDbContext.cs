@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProgramaYA.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+using ProgramaYA.Models;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
