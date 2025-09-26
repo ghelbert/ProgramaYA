@@ -5,13 +5,14 @@ using ProgramaYA.Models;
 
 namespace ProgramaYA.Areas.Identity.Data;
 
-public class TuDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    public TuDbContext(DbContextOptions<TuDbContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
 
+    public DbSet<Curso> Cursos { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
