@@ -1,0 +1,93 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Acerca de ProgramaYA";
+    Layout = "_Layout";
+}
+
+<!-- Main Content -->
+<main class="bg-success min-vh-100 py-5">
+
+        <div class="text-center mb-5 pb-3 ">
+            <h1 class="display-5 text-white fw-bold mb-1">Catálogo de Cursos Disponibles</h1>
+            <p class="lead text-white">Aprende las tecnologías más demandadas del mercado.</p>
+        </div>
+
+<div class="container py-4">
+    <!-- Rejilla responsiva con 3 columnas en pantallas medianas y 4 en pantallas grandes -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+        @foreach (var curso in Model)
+        {
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm text-center p-3 rounded-4 transition-shadow hover-shadow-lg">
+                    <img src="@curso.Imagen" class="card-img-top rounded-circle mx-auto d-block" 
+                         alt="@curso.Nombre" style="width: 90px; height: 90px; object-fit: cover;">
+                    <div class="card-body p-0 mb-3">
+                        <h5 class="card-title text-dark fw-bold mb-2">@curso.Nombre</h5>
+                        <span class="badge bg-success fw-normal rounded-pill py-2 px-3 small">@curso.Nivel</span>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 mt-3">
+                    @if (SignInManager.IsSignedIn(User))
+                        {
+                            <a href="#" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
+                            <i class="bi bi-book-fill me-1"></i> Ver Contenido
+                        </a>
+
+                        }
+                        else
+                        {
+                                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
+                            <i class="bi bi-book-fill me-1"></i> Ver Contenido
+                        </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</main>
+<script>
+    // Add smooth scrolling and interactive effects
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add click events to course buttons
+        const courseButtons = document.querySelectorAll('.course-button');
+        courseButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Get the course name
+                const courseCard = this.closest('.course-card');
+                const courseName = courseCard.querySelector('.course-tech-badge').textContent;
+
+                // Add loading effect
+                const originalText = this.textContent;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Cargando...';
+
+                // Simulate navigation delay
+                setTimeout(() => {
+                    alert(`Navegando al curso: ${courseName.trim()}`);
+                    this.textContent = originalText;
+                }, 1000);
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar-custom');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+    });
+</script>
+@section Scripts {
+    <!-- Puedes agregar scripts adicionales aquí si lo necesitas -->
+}

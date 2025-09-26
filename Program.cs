@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProgramaYA.Data;
 using ProgramaYA.Models;
 using ProgramaYA.Areas.Identity.Data;
 
