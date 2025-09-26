@@ -23,17 +23,17 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+    private readonly SignInManager<ProgramaYA.Models.ApplicationUser> _signInManager;
+    private readonly UserManager<ProgramaYA.Models.ApplicationUser> _userManager;
+    private readonly IUserStore<ProgramaYA.Models.ApplicationUser> _userStore;
+    private readonly IUserEmailStore<ProgramaYA.Models.ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ProgramaYA.Models.ApplicationUser> userManager,
+            IUserStore<ProgramaYA.Models.ApplicationUser> userStore,
+            SignInManager<ProgramaYA.Models.ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -70,29 +70,34 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            [Display(Name = "Nombres")]
+            public string Nombres { get; set; }
+
+            [Required]
+            [Display(Name = "Apellidos")]
+            public string Apellidos { get; set; }
+
+            [Required]
+            [Display(Name = "DNI")]
+            public string DNI { get; set; }
+
+            [Required]
+            [Display(Name = "Celular")]
+            [Phone]
+            public string Celular { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -154,27 +159,33 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ProgramaYA.Models.ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return new ProgramaYA.Models.ApplicationUser
+                {
+                    Nombres = Input.Nombres,
+                    Apellidos = Input.Apellidos,
+                    DNI = Input.DNI,
+                    Celular = Input.Celular
+                };
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ProgramaYA.Models.ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ProgramaYA.Models.ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ProgramaYA.Models.ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ProgramaYA.Models.ApplicationUser>)_userStore;
         }
     }
 }
