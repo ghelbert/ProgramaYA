@@ -15,54 +15,42 @@
 }
 
 
-    <h5 class="text-white fw-semibold mb-3 mt-4">Configuración de la Cuenta</h5>
 
-    <div class="list-group shadow-sm rounded-4 border border-success-subtle">
+<h5 class="fw-semibold ms-5">Configuración de la Cuenta</h5>
 
-        <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.IndexNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.IndexNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-            id="profile" asp-page="./Index">
-            <i
-                class="bi bi-person-circle me-2 @(ViewContext != null && ManageNavPages.IndexNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-            Perfil
+<div class="list-group shadow-sm rounded-4 border border-success-subtle">
+    <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.IndexNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.IndexNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+        id="profile" asp-page="./Index">
+        <i class="bi bi-person-circle me-2 @(ViewContext != null && ManageNavPages.IndexNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+        Perfil
+    </a>
+    <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.EmailNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.EmailNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+        id="email" asp-page="./Email">
+        <i class="bi bi-envelope-fill me-2 @(ViewContext != null && ManageNavPages.EmailNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+        Correo Electrónico
+    </a>
+    <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.ChangePasswordNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.ChangePasswordNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+        id="change-password" asp-page="./ChangePassword">
+        <i class="bi bi-key-fill me-2 @(ViewContext != null && ManageNavPages.ChangePasswordNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+        Contraseña
+    </a>
+    @if (hasExternalLogins)
+    {
+        <a id="external-login"
+            class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.ExternalLoginsNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.ExternalLoginsNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+            asp-page="./ExternalLogins">
+            <i class="bi bi-box-arrow-in-right me-2 @(ViewContext != null && ManageNavPages.ExternalLoginsNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+            Inicios de Sesión Externos
         </a>
-
-        <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.EmailNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.EmailNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-            id="email" asp-page="./Email">
-            <i
-                class="bi bi-envelope-fill me-2 @(ViewContext != null && ManageNavPages.EmailNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-            Correo Electrónico
-        </a>
-
-        <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.ChangePasswordNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.ChangePasswordNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-            id="change-password" asp-page="./ChangePassword">
-            <i
-                class="bi bi-key-fill me-2 @(ViewContext != null && ManageNavPages.ChangePasswordNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-            Contraseña
-        </a>
-
-        @if (hasExternalLogins)
-        {
-            <a id="external-login"
-                class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.ExternalLoginsNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.ExternalLoginsNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-                asp-page="./ExternalLogins">
-                <i
-                    class="bi bi-box-arrow-in-right me-2 @(ViewContext != null && ManageNavPages.ExternalLoginsNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-                Inicios de Sesión Externos
-            </a>
-        }
-
-        <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-            id="two-factor" asp-page="./TwoFactorAuthentication">
-            <i
-                class="bi bi-shield-lock-fill me-2 @(ViewContext != null && ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-            Autenticación de Dos Factores (2FA)
-        </a>
-
-        <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.PersonalDataNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.PersonalDataNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
-            id="personal-data" asp-page="./PersonalData">
-            <i
-                class="bi bi-file-earmark-lock-fill me-2 @(ViewContext != null && ManageNavPages.PersonalDataNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
-            Datos Personales
-        </a>
-    </div>
-
+    }
+    <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+        id="two-factor" asp-page="./TwoFactorAuthentication">
+        <i class="bi bi-shield-lock-fill me-2 @(ViewContext != null && ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+        Autenticación de Dos Factores (2FA)
+    </a>
+    <a class="list-group-item list-group-item-action py-3 px-4 @(ViewContext != null ? ManageNavPages.PersonalDataNavClass(ViewContext) : "") @(ViewContext != null && ManageNavPages.PersonalDataNavClass(ViewContext)?.Contains("active") == true ? "list-group-item-success text-white" : "")"
+        id="personal-data" asp-page="./PersonalData">
+        <i class="bi bi-file-earmark-lock-fill me-2 @(ViewContext != null && ManageNavPages.PersonalDataNavClass(ViewContext)?.Contains("active") == true ? "text-white" : "text-success")"></i>
+        Datos Personales
+    </a>
+</div>

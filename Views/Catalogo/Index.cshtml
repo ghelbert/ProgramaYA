@@ -31,14 +31,13 @@
                     <div class="card-footer bg-white border-0 pt-0 mt-3">
                     @if (SignInManager.IsSignedIn(User))
                         {
-                            <a href="#" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
-                            <i class="bi bi-book-fill me-1"></i> Ver Contenido
-                        </a>
-
+                            <a href="@Url.Action("Detalles", "Catalogo", new { id = curso.Id })" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
+                                <i class="bi bi-book-fill me-1"></i> Ver Contenido
+                            </a>
                         }
                         else
                         {
-                                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
                             <i class="bi bi-book-fill me-1"></i> Ver Contenido
                         </a>
                         }

@@ -13,11 +13,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Curso> Cursos { get; set; }
+    public DbSet<Capitulo> Capitulos { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+        ConfigureCurso(builder);
+    }
+
+    private void ConfigureCurso(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Capitulo>()
+                    .HasOne(h => h.Curso)
+                    .WithMany(h => h.Capitulos)
+                    .HasForeignKey(fk => fk.CursoId)
+                    .OnDelete(DeleteBehavior.Restrict);
     }
 }
