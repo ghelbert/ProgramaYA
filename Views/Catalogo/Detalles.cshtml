@@ -127,9 +127,11 @@
                         <div class="course-info">
 
                             <div class="mt-4">
-                                <button class="btn btn-success btn-block w-100 fw-bold" onclick="subscribeToCourse()">
-                                    SUSCRIBIRSE
-                                </button>
+                                <a href="@Url.Action("Suscripcion", "Catalogo", new { id = Model.Id })"
+                                    class="btn btn-outline-success btn-sm fw-medium w-100 rounded-pill">
+                                        SUSCRIBIRSE
+                                </a>
+
                             </div>
                         </div>
                     </div>
@@ -151,24 +153,7 @@
             videoContainer.style.display = 'none';
         }
     }
-    function subscribeToCourse() {
-        // Aquí puedes agregar la lógica para la suscripción
-        // Ejemplo simple con SweetAlert (si lo tienes incluido)
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: '¡Excelente!',
-                text: 'Te has suscrito al curso de ' + '@Model.Nombre',
-                icon: 'success',
-                confirmButtonText: 'Continuar'
-            });
-        } else {
-            // Fallback con alert nativo
-            alert('¡Te has suscrito al curso de ' + '@Model.Nombre' + '!');
-        }
 
-        // O redirigir a una página de checkout
-        // window.location.href = '@Url.Action("Checkout", "Course")';
-    }
     function GetYouTubeVideoId(url) {
         var videoId = url.split('v=')[1];
         if (videoId.indexOf('&') !== -1) {
