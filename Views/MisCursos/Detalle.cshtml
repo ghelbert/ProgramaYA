@@ -1,0 +1,227 @@
+@model Curso
+
+@{
+    ViewData["Title"] = "Curso de " + Model.Nombre;
+}
+
+<style>
+    body {
+        
+        min-height: 100vh;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero-section {
+        padding: 40px 0;
+        flex: 1 0 auto; /* Permite que el contenedor crezca según el contenido */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Alinea al inicio para permitir expansión */
+    }
+
+    .course-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 800px;
+        width: 100%;
+        height: auto; /* Permite que la tarjeta crezca dinámicamente */
+    }
+
+    .course-header {
+        padding: 2rem;
+        background: white;
+    }
+
+    .course-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .course-description {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .course-image {
+        width: 150px;
+        height: 150px;
+        background: #2c3e50;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .dotnet-logo {
+        color: #ffffff;
+        font-size: 3rem;
+    }
+
+    .topic-item {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 5px;
+        color: #495057;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+
+    .topic-item:hover {
+        color: #20b269;
+    }
+
+    .video-container {
+        margin-top: 10px;
+        padding: 5px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: none; /* Oculto por defecto */
+        transition: height 0.3s ease, opacity 0.3s ease; /* Transición suave */
+        opacity: 0; /* Para fade-in/out */
+        height: 0; /* Altura inicial cero para animación */
+        overflow: hidden;
+    }
+
+    .video-container.active {
+        display: block;
+        opacity: 1;
+        height: 240px; /* Altura del iframe */
+    }
+
+    .video-container iframe {
+        width: 100%;
+        height: 240px;
+        border-radius: 5px;
+    }
+
+    .course-info {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .info-item {
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    footer {
+        flex-shrink: 0; /* Evita que el footer se comprima */
+        width: 100%;
+        background: #333;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+    }
+</style>
+
+<div class="hero-section bg-success align-items-center">
+    <div class="container align-items-center d-flex justify-content-center">
+        <div class="course-card">
+            <div class="course-header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h1 class="course-title">@(Model.Nombre ?? "Sin nombre")</h1>
+                        <p class="course-description">
+                            @(Model.Descripcion ?? "Sin descripción")
+                        </p>
+
+                        <!-- Lista de temas -->
+                        <div class="topics-list">
+                            @if (Model.Capitulos == null || !Model.Capitulos.Any())
+                            {
+                                <p>No hay capítulos disponibles.</p>
+                            }
+                            else
+                            {
+                                @foreach (var capitulo in Model.Capitulos)
+                                {
+                                    <div class="topic-item" onclick="toggleVideo('@capitulo.Id')">
+                                        <span class="topic-title">@(capitulo.Titulo ?? "Sin título")</span>
+                                        <!-- Video oculto por defecto -->
+                                        <div id="video-container-@capitulo.Id" class="video-container">
+                                            @{
+                                                var videoId = capitulo.Video;
+                                            }
+                                            <iframe width="100%" height="240" src="https://www.youtube.com/embed/@videoId"
+                                                    frameborder="0"
+                                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <div class="course-image mx-auto">
+                            <img src="@(Model.Imagen ?? "/images/default-course.jpg")" alt="Imagen del curso" class="img-fluid rounded-1"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        <div class="course-info">
+                            <!-- Información adicional del curso puede ir aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleVideo(temaId) {
+        // Obtener todos los contenedores de video
+        const allVideoContainers = document.querySelectorAll('.video-container');
+        
+        // Cerrar todos los videos excepto el seleccionado
+        allVideoContainers.forEach(container => {
+            if (container.id !== 'video-container-' + temaId) {
+                container.classList.remove('active');
+                container.style.height = '0';
+                container.style.opacity = '0';
+            }
+        });
+
+        // Alternar visibilidad del video seleccionado
+        const videoContainer = document.getElementById('video-container-' + temaId);
+        if (videoContainer.classList.contains('active')) {
+            videoContainer.classList.remove('active');
+            videoContainer.style.height = '0';
+            videoContainer.style.opacity = '0';
+        } else {
+            videoContainer.classList.add('active');
+            videoContainer.style.height = '240px';
+            videoContainer.style.opacity = '1';
+        }
+
+        // Forzar el redibujado del contenedor para ajustar el layout
+        const courseCard = document.querySelector('.course-card');
+        courseCard.style.height = 'auto';
+    }
+
+    function GetYouTubeVideoId(url) {
+        var videoId = url.split('v=')[1];
+        if (videoId && videoId.indexOf('&') !== -1) {
+            videoId = videoId.split('&')[0];
+        }
+        return videoId || '';
+    }
+</script>
+
+<!-- Font Awesome para iconos (agregar en el layout si no está incluido) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
