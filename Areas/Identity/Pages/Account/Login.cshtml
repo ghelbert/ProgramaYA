@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "INICIAR SESION";
+    var userId = TempData["UserId"] as string;
 }
 
 <main class="bg-success">
@@ -14,7 +15,9 @@
                     <div class="card-body p-4 p-md-5">
 
                         <section>
-                            <form id="account" method="post">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
                                 <h2 class="h4 mb-3">Usa una cuenta local para iniciar sesión.</h2>
                                 <hr class="mb-4" />
 
@@ -62,7 +65,7 @@
                                             correo</a>
                                     </p>
                                 </div>
-                            </form>
+                            }
                         </section>
                     </div>
                 </div>
@@ -94,7 +97,7 @@
                             externos.</p>
                     </div>
                 }
-
+                
             </div>
         </div>
     </div>

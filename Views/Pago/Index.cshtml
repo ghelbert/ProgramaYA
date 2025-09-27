@@ -1,0 +1,328 @@
+@model PagoSuscripcionViewModel
+@{
+    ViewBag.Title = "Realizar Pago";
+    Layout = "_Layout";
+}
+
+<style>
+    .credit-card {
+        perspective: 1000px;
+    }
+
+    .card-display {
+        transition: transform 0.6s, box-shadow 0.3s;
+        transform-style: preserve-3d;
+        position: relative;
+        height: 200px;
+    }
+
+    .card-display:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-front, .card-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+
+    .card-back {
+        transform: rotateY(180deg);
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .card-flip .card-front {
+        transform: rotateY(180deg);
+    }
+
+    .card-flip .card-back {
+        transform: rotateY(0deg);
+    }
+
+    .form-group {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeInUp 0.5s ease forwards;
+        animation-delay: calc(0.1s * var(--index));
+    }
+
+    @@keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-control:focus {
+        border-color: #2dd4bf;
+        box-shadow: 0 0 8px rgba(45, 212, 191, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-loading {
+        position: relative;
+        color: transparent !important;
+        pointer-events: none;
+    }
+
+    .btn-loading::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid #fff;
+        border-top: 3px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .text-danger {
+        opacity: 0;
+        transform: translateY(5px);
+        animation: fadeInError 0.3s ease forwards;
+    }
+
+    @@keyframes fadeInError {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card-number, .card-holder, .valid-thru, .card-logo {
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container-fluid min-vh-100 bg-success">
+    <h1 class="text-center py-5 fw-bold text-white">@ViewData["Title"]</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5 mb-5">
+            <div class="card shadow-lg border-0" style="border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="credit-card mb-4">
+                        <div class="card-display" id="cardDisplay">
+                            <div class="card-front" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">
+                                <div class="chip" style="width: 35px; height: 28px; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 4px; position: absolute; top: 60px; left: 20px;"></div>
+                                <div class="bank-name" style="position: absolute; top: 20px; right: 20px; font-size: 14px; font-weight: bold;">NBank</div>
+                                <div class="card-number" id="cardNumberDisplay" style="position: absolute; top: 100px; left: 20px; font-family: 'Courier New', monospace; font-size: 18px; letter-spacing: 2px;">•••• •••• •••• ••••</div>
+                                <div class="card-holder" id="cardHolderDisplay" style="position: absolute; bottom: 40px; left: 20px;">
+                                    <div style="font-size: 10px; opacity: 0.8;">CARD HOLDER</div>
+                                    <div style="font-size: 14px; font-weight: bold;">A** HOLDER</div>
+                                </div>
+                                <div class="valid-thru" id="validThruDisplay" style="position: absolute; bottom: 40px; right: 80px;">
+                                    <div style="font-size: 10px; opacity: 0.8;">VALID THRU</div>
+                                    <div style="font-size: 14px; font-weight: bold;">••/••</div>
+                                </div>
+                                <div class="card-logo" id="cardLogo" style="position: absolute; bottom: 8px; left: 20px; background: white; color: #1a365d; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 16px;">VISA</div>
+                            </div>
+                            <div class="card-back">CVV: <span id="cvvDisplay">•••</span></div>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("RegistrarPagoConSuscripcion", "Pago", FormMethod.Post, new { @id = "paymentForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group mb-3" style="--index: 1;">
+                            <label class="form-label text-muted small">Tipo de Tarjeta:</label>
+                            @Html.DropDownListFor(model => model.Pago.TipoTarjeta, new SelectList(
+                                new[]
+                                {
+                                    new { Value = "", Text = "Seleccionar..." },
+                                    new { Value = "visa", Text = "Visa" },
+                                    new { Value = "mastercard", Text = "Mastercard" }
+                                }, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "border: 1px solid #e5e7eb; border-radius: 8px;" })
+                            @Html.ValidationMessageFor(model => model.Pago.TipoTarjeta, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3" style="--index: 2;">
+                            <label class="form-label text-muted small">Titular de la Tarjeta</label>
+                            @Html.TextBoxFor(model => model.Pago.Titular, new { @class = "form-control", @placeholder = "Esther Howard", @style = "border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;", @id = "cardHolder" })
+                            @Html.ValidationMessageFor(model => model.Pago.Titular, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3" style="--index: 3;">
+                            <label class="form-label text-muted small">Número de Tarjeta</label>
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.Pago.NumeroTarjeta, new { @class = "form-control", @placeholder = "1234 5678 9012 3456", @maxlength = "19", @style = "border: 1px solid #e5e7eb; border-radius: 8px 0 0 8px; padding: 12px;", @id = "cardNumber" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="border: 1px solid #e5e7eb; border-left: none; border-radius: 0 8px 8px 0; background: white; padding: 12px;">
+                                        <i class="fas fa-credit-card text-muted"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Pago.NumeroTarjeta, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group mb-3" style="--index: 4;">
+                                    <label class="form-label text-muted small">Fecha de Vencimiento</label>
+                                    @Html.TextBoxFor(model => model.Pago.FechaVencimiento, new { @class = "form-control", @placeholder = "MM/YY", @maxlength = "7", @style = "border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;", @id = "expiryDate" })
+                                    @Html.ValidationMessageFor(model => model.Pago.FechaVencimiento, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="form-group mb-3" style="--index: 5;">
+                                    <label class="form-label text-muted small">CVV</label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.Pago.CVV, new { @class = "form-control", @placeholder = "•••", @maxlength = "4", @style = "border: 1px solid #e5e7eb; border-radius: 8px 0 0 8px; padding: 12px;", @id = "cvv" })
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" style="border: 1px solid #e5e7eb; border-left: none; border-radius: 0 8px 8px 0; background: white; padding: 12px;">
+                                                <i class="fas fa-question-circle text-muted"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Pago.CVV, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @Html.HiddenFor(model => model.Pago.Total)
+                        @Html.HiddenFor(model => model.Suscripcion.UsuarioId)
+                        @Html.HiddenFor(model => model.Suscripcion.CursoId)
+                        @Html.HiddenFor(model => model.Suscripcion.Meses)
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-lg px-5 py-3 submit-btn" style="background: linear-gradient(135deg, #2dd4bf, #0d9488); border: none; color: white; font-weight: bold; border-radius: 25px; min-width: 200px;">
+                                REALIZAR PAGO
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+
+@section Scripts {
+ 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Format card number input
+            const cardNumberInput = document.getElementById('cardNumber');
+            cardNumberInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                e.target.value = value;
+
+                // Update card display
+                const cardDisplay = document.querySelector('.card-number');
+                if (value.length > 0) {
+                    let maskedNumber = value.replace(/\d(?=\d{4})/g, '•');
+                    cardDisplay.textContent = maskedNumber.padEnd(19, '•').replace(/(.{4})/g, '$1 ').trim();
+                } else {
+                    cardDisplay.textContent = '•••• •••• •••• ••••';
+                }
+            });
+
+            // Format expiry date input
+            const expiryInput = document.getElementById('expiryDate');
+            expiryInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + ' / ' + value.substring(2, 4);
+                }
+                e.target.value = value;
+
+                // Update card display
+                const expiryDisplay = document.querySelector('.valid-thru div:last-child');
+                if (value.length > 0) {
+                    expiryDisplay.textContent = value;
+                } else {
+                    expiryDisplay.textContent = '••/••';
+                }
+            });
+
+            // Update card holder name
+            const cardHolderInput = document.getElementById('cardHolder');
+            cardHolderInput.addEventListener('input', function (e) {
+                const cardHolderDisplay = document.querySelector('.card-holder div:last-child');
+                if (e.target.value.length > 0) {
+                    let name = e.target.value.toUpperCase();
+                    let maskedName = name.charAt(0) + '**' + ' ' + (name.split(' ')[1] ? name.split(' ')[1] : 'HOLDER');
+                    cardHolderDisplay.textContent = maskedName;
+                } else {
+                    cardHolderDisplay.textContent = 'A** HOLDER';
+                }
+            });
+
+            // CVV input restriction
+            const cvvInput = document.getElementById('cvv');
+            cvvInput.addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+                document.getElementById('cvvDisplay').textContent = e.target.value || '•••';
+            });
+
+            // Card flip animation
+            cvvInput.addEventListener('focus', function () {
+                document.getElementById('cardDisplay').classList.add('card-flip');
+            });
+            cvvInput.addEventListener('blur', function () {
+                document.getElementById('cardDisplay').classList.remove('card-flip');
+            });
+
+            // Update card logo and background
+            const tipoTarjeta = document.getElementById('tipoTarjeta');
+            tipoTarjeta.addEventListener('change', function () {
+                const value = this.value;
+                const logoText = value === 'visa' ? 'VISA' : value === 'mastercard' ? 'MASTERCARD' : 'CARD';
+                document.getElementById('cardLogo').textContent = logoText;
+                const bg = value === 'visa' ? 'linear-gradient(135deg, #1e40af, #3b82f6)' :
+                           value === 'mastercard' ? 'linear-gradient(135deg, #ef4444, #f97316)' :
+                           'linear-gradient(135deg, #6b7280, #9ca3af)';
+                document.querySelector('.card-front').style.background = bg;
+            });
+
+            // Submit button loading animation
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.addEventListener('click', function () {
+                this.classList.add('btn-loading');
+            });
+        });
+
+        $(document).ready(function () {
+            $('.form-group').each(function (index) {
+                $(this).css('--index', index + 1);
+            });
+
+            // Asignar valores de sessionStorage con IDs correctos
+            const total = sessionStorage.getItem('total');
+            const usuarioId = sessionStorage.getItem('userId');
+            const cursoId = sessionStorage.getItem('courseId');
+            const meses = sessionStorage.getItem('meses');
+            console.log('SessionStorage:', { total, usuarioId, cursoId, meses });
+
+            if (total) $('#Pago_Total').val(total);
+            if (usuarioId) $('#Suscripcion_UsuarioId').val(usuarioId);
+            if (cursoId) $('#Suscripcion_CursoId').val(cursoId);
+            if (meses) $('#Suscripcion_Meses').val(meses);
+        });
+    </script>
+}
