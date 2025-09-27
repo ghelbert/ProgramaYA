@@ -32,7 +32,21 @@ public class MisCursosController : Controller
 
         return View(cursos);
     }
-
+    public async Task<IActionResult> Detalle(int id)
+    {
+        Curso? curso = await _context.Cursos
+        .Include(i => i.Capitulos)
+        .FirstOrDefaultAsync(i => i.Id == id);
+        foreach (var item in curso.Capitulos)
+        {
+            item.Video = CatalogoController.GetYouTubeVideoId(item.Video);
+        }
+        if (curso == null)
+        {
+            return NotFound();
+        }
+        return View(curso);
+    }
     public IActionResult Privacy()
     {
         return View();

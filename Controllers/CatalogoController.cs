@@ -55,7 +55,7 @@ public class CatalogoController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-    public string GetYouTubeVideoId(string url)
+    public static string GetYouTubeVideoId(string url)
     {
         if (string.IsNullOrEmpty(url)) return string.Empty;
 
