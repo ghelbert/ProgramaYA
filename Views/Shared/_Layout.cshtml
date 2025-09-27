@@ -108,3 +108,14 @@
 </body>
 
 </html>
+<script>
+    var userId = '@ViewData["UserId"]';
+    console.log("UserId received: " + userId); // Verifica qué valor se está recibiendo
+    if (userId && userId.trim() !== "") {
+        sessionStorage.setItem('userId', userId);
+        console.log("User ID stored in sessionStorage: " + userId);
+    }
+    else {
+        console.error("User ID is not available or is empty.");
+    }
+</script>

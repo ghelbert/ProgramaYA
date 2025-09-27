@@ -12,7 +12,7 @@ namespace ProgramaYA.Models
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
         public string? Nivel { get; set; }
-        public decimal? Precio { get; set; }
+        public int? Precio { get; set; }
         public string? Imagen { get; set; }
         public List<Capitulo>? Capitulos { get; set; }
     }

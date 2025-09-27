@@ -40,7 +40,7 @@ public class CatalogoController : Controller
     }
     public async Task<IActionResult> Suscripcion(int id)
     {
-        Curso? curso = await _context.Cursos        
+        Curso? curso = await _context.Cursos
         .FirstOrDefaultAsync(i => i.Id == id);
 
         if (curso == null)

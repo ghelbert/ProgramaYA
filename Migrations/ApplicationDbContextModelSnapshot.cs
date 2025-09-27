@@ -265,12 +265,40 @@ namespace ProgramaYA.Migrations
                     b.Property<string>("Nombre")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("Precio")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("Precio")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cursos");
+                });
+
+            modelBuilder.Entity("ProgramaYA.Models.Pago", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CVV")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FechaVencimiento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NumeroTarjeta")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TipoTarjeta")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Titular")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Total")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pagos");
                 });
 
             modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
@@ -278,9 +306,6 @@ namespace ProgramaYA.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("CursoId")
                         .HasColumnType("INTEGER");
@@ -291,14 +316,17 @@ namespace ProgramaYA.Migrations
                     b.Property<DateOnly?>("FechaTermino")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Meses")
+                    b.Property<int>("Meses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UsuarioId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("CursoId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Suscripciones");
                 });
@@ -364,24 +392,46 @@ namespace ProgramaYA.Migrations
                     b.Navigation("Curso");
                 });
 
+            modelBuilder.Entity("ProgramaYA.Models.Pago", b =>
+                {
+                    b.HasOne("ProgramaYA.Models.Suscripcion", "Suscripcion")
+                        .WithOne("Pago")
+                        .HasForeignKey("ProgramaYA.Models.Pago", "Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Suscripcion");
+                });
+
             modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
                 {
-                    b.HasOne("ProgramaYA.Models.ApplicationUser", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("ProgramaYA.Models.Curso", "Curso")
                         .WithMany()
                         .HasForeignKey("CursoId");
+
+                    b.HasOne("ProgramaYA.Models.ApplicationUser", "Usuario")
+                        .WithMany("Suscripciones")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Curso");
 
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("ProgramaYA.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Suscripciones");
+                });
+
             modelBuilder.Entity("ProgramaYA.Models.Curso", b =>
                 {
                     b.Navigation("Capitulos");
+                });
+
+            modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
+                {
+                    b.Navigation("Pago");
                 });
 #pragma warning restore 612, 618
         }

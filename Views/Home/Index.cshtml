@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "ProgramaYA";
     Layout = "_Layout";
+    var userId = TempData["UserId"] as string;
 }
 
 
@@ -10,7 +11,7 @@
         <!-- Welcome Section -->
         <div class="text-center mb-5">
             <h1 class="display-4 fw-bold text-white mb-4">
-                ¡BIENVENIDO A ProgramaYA!
+                <p>Bienvenido a @ViewData["Title"]</p>
             </h1>
         </div>
 
@@ -41,11 +42,11 @@
                 <span class="visually-hidden">Next</span>
             </button>
 
-                <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
-                    <p class="text-center text-white m-3">
-                        NUEVOS CURSOS
-                    </p>
-                </div>
+            <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
+                <p class="text-center text-white m-3">
+                    NUEVOS CURSOS
+                </p>
+            </div>
 
         </div>
 
@@ -59,14 +60,15 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="my-5">
-                                <img class="w-50 top-0" src="https://th.bing.com/th/id/OIP.FXkCxZPv-nYiNTYRxSm27AHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
-                                     alt=".">
+                                <img class="w-50 top-0"
+                                    src="https://th.bing.com/th/id/OIP.FXkCxZPv-nYiNTYRxSm27AHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
+                                    alt=".">
                             </div>
                             <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
                                 <small class="fw-bold">.NET - BÁSICO</small>
                             </div>
                             <br>
-                            <a href="@Url.Action("Details", "Courses", new { id = "dotnet-basico" })"
+                            <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
                                 class="btn btn-success fw-bold px-4 py-2">
                                 IR AL CURSO
                             </a>
@@ -76,14 +78,15 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="my-5 ">
-                                <img class="w-50 " src="https://th.bing.com/th/id/OIP.g4HM3XwYVd_UXSyE3438DwHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
-                                     alt=".">
+                                <img class="w-50 "
+                                    src="https://th.bing.com/th/id/OIP.g4HM3XwYVd_UXSyE3438DwHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
+                                    alt=".">
                             </div>
                             <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
                                 <small class="fw-bold">PYTHON - BÁSICO</small>
                             </div>
                             <br>
-                            <a href="@Url.Action("Details", "Courses", new { id = "dotnet-basico" })"
+                            <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
                                 class="btn btn-success fw-bold px-4 py-2">
                                 IR AL CURSO
                             </a>
@@ -93,21 +96,22 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="my-5">
-                                <img class="w-75" src="https://th.bing.com/th/id/OIP._Lm_T3scKhVEVFC54gcRxwHaE8?w=246&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
-                                     alt=".">
+                                <img class="w-75"
+                                    src="https://th.bing.com/th/id/OIP._Lm_T3scKhVEVFC54gcRxwHaE8?w=246&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
+                                    alt=".">
                             </div>
                             <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
                                 <small class="fw-bold">JAVA - BÁSICO</small>
                             </div>
                             <br>
-                            <a href="@Url.Action("Details", "Courses", new { id = "dotnet-basico" })"
+                            <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
                                 class="btn btn-success fw-bold px-4 py-2">
                                 IR AL CURSO
                             </a>
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
         </div>
@@ -116,20 +120,39 @@
 
 @section Scripts {
     <script>
-        // Simple carousel functionality
         document.addEventListener('DOMContentLoaded', function () {
+            // Safely serialize TempData["UserId"] to JavaScript
+            var userId = @Html.Raw(Json.Serialize(TempData["UserId"]));
+            console.log("UserId received: ", userId);
+
+            if (userId && userId.trim() !== "") {
+                try {
+                    sessionStorage.setItem('userId', userId);
+                    console.log("User ID stored in sessionStorage: ", userId);
+                } catch (e) {
+                    console.error("Failed to store User ID in sessionStorage: ", e);
+                }
+            } else {
+                console.error("User ID is not available or is empty.");
+            }
+
+            // Note: The prevBtn and nextBtn elements do not exist in the provided HTML.
+            // If you intend to use Bootstrap carousel controls, they are already handled by data-bs attributes.
+            // Remove or adjust this code if it’s not needed.
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
 
-            prevBtn.addEventListener('click', function () {
-                // Implement previous courses logic
-                console.log('Previous courses');
-            });
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    console.log('Previous courses');
+                });
+            }
 
-            nextBtn.addEventListener('click', function () {
-                // Implement next courses logic
-                console.log('Next courses');
-            });
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function () {
+                    console.log('Next courses');
+                });
+            }
         });
     </script>
 }

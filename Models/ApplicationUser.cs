@@ -8,5 +8,6 @@ namespace ProgramaYA.Models
     public string? Apellidos { get; set; }
     public string? DNI { get; set; }
     public string? Celular { get; set; }
+    public List<Suscripcion>? Suscripciones { get; set; }
     }
 }

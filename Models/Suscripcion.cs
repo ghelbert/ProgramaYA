@@ -10,13 +10,15 @@ namespace ProgramaYA.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int? Id { get; set; }
-        public string? ApplicationUserId { get; set; }
+        public string? UsuarioId { get; set; }
         public int? CursoId { get; set; }
         [JsonIgnore]
         public ApplicationUser? Usuario { get; set; }
         [JsonIgnore]
         public Curso? Curso { get; set; }
-        public string? Meses { get; set; }
+        [JsonIgnore]
+        public Pago? Pago { get; set; }
+        public int Meses { get; set; }
         public DateOnly? FechaInicio { get; set; }
         public DateOnly? FechaTermino { get; set; }
     }
