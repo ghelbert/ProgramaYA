@@ -167,6 +167,9 @@ namespace ProgramaYA.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CursoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("DNI")
                         .HasColumnType("TEXT");
 
@@ -214,6 +217,8 @@ namespace ProgramaYA.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -382,6 +387,13 @@ namespace ProgramaYA.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProgramaYA.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ProgramaYA.Models.Curso", null)
+                        .WithMany("Usuarios")
+                        .HasForeignKey("CursoId");
+                });
+
             modelBuilder.Entity("ProgramaYA.Models.Capitulo", b =>
                 {
                     b.HasOne("ProgramaYA.Models.Curso", "Curso")
@@ -427,6 +439,8 @@ namespace ProgramaYA.Migrations
             modelBuilder.Entity("ProgramaYA.Models.Curso", b =>
                 {
                     b.Navigation("Capitulos");
+
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
