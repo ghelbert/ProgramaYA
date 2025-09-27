@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -55,6 +58,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "Catalogo")">Catalogo</a>
                     </li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary mx-5" href="#" onclick="goToMisCursos()">Mis cursos</a>
+                        </li>
+                    }
+                    else
+                    {
+                    }
                 </ul>
 
             </div>
@@ -109,13 +121,13 @@
 
 </html>
 <script>
-    var userId = '@ViewData["UserId"]';
-    console.log("UserId received: " + userId); // Verifica qué valor se está recibiendo
-    if (userId && userId.trim() !== "") {
-        sessionStorage.setItem('userId', userId);
-        console.log("User ID stored in sessionStorage: " + userId);
-    }
-    else {
-        console.error("User ID is not available or is empty.");
+    function goToMisCursos() {
+        const userId = sessionStorage.getItem("userId");
+        if (userId) {
+            // Redirige al controlador con userId como query string
+            window.location.href = `/MisCursos/Index?userId=${encodeURIComponent(userId)}`;
+        } else {
+            alert("Usuario no identificado.");
+        }
     }
 </script>

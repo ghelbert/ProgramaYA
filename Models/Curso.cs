@@ -15,5 +15,6 @@ namespace ProgramaYA.Models
         public int? Precio { get; set; }
         public string? Imagen { get; set; }
         public List<Capitulo>? Capitulos { get; set; }
+        public List<ApplicationUser>? Usuarios { get; set; }
     }
 }
