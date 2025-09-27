@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Curso> Cursos { get; set; }
     public DbSet<Capitulo> Capitulos { get; set; }
+    public DbSet<Suscripcion> Suscripciones { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

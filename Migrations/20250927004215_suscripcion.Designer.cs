@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProgramaYA.Areas.Identity.Data;
 
@@ -10,9 +11,11 @@ using ProgramaYA.Areas.Identity.Data;
 namespace ProgramaYA.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250927004215_suscripcion")]
+    partial class suscripcion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -273,36 +276,6 @@ namespace ProgramaYA.Migrations
                     b.ToTable("Cursos");
                 });
 
-            modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CursoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateOnly?>("FechaInicio")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateOnly?>("FechaTermino")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Meses")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CursoId");
-
-                    b.ToTable("Suscripciones");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -362,21 +335,6 @@ namespace ProgramaYA.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Curso");
-                });
-
-            modelBuilder.Entity("ProgramaYA.Models.Suscripcion", b =>
-                {
-                    b.HasOne("ProgramaYA.Models.ApplicationUser", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("ProgramaYA.Models.Curso", "Curso")
-                        .WithMany()
-                        .HasForeignKey("CursoId");
-
-                    b.Navigation("Curso");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ProgramaYA.Models.Curso", b =>

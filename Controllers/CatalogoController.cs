@@ -38,6 +38,17 @@ public class CatalogoController : Controller
         }
         return View(curso);
     }
+    public async Task<IActionResult> Suscripcion(int id)
+    {
+        Curso? curso = await _context.Cursos        
+        .FirstOrDefaultAsync(i => i.Id == id);
+
+        if (curso == null)
+        {
+            return NotFound();
+        }
+        return View(curso);
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
