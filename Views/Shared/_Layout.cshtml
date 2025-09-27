@@ -13,20 +13,23 @@
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
- <style>
-        html, body {
-            height: 100%;
-        }
+<style>
+    html,
+    body {
+        height: 100%;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+        display: flex;
+        flex-direction: column;
+    }
 
-        main {
-            flex: 1; /* Hace que el contenido crezca para empujar el footer hacia abajo */
-        }
-    </style>
+    main {
+        flex: 1;
+        /* Hace que el contenido crezca para empujar el footer hacia abajo */
+    }
+</style>
+
 <body>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
