@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
     ViewData["Title"] = "ProgramaYA";
     Layout = "_Layout";
     var userId = TempData["UserId"] as string;
@@ -17,7 +19,7 @@
 
         <!-- New Courses Section -->
         <div id="carouselExampleControlsNoTouching" class="carousel slide w-100" data-bs-touch="false">
-            <div class="carousel-inner">
+            <div class="carousel-inner" style="height: 650px;">
                 <div class="carousel-item active">
                     <img src="https://static.platzi.com/media/blog/nueva-version-nodejs-npm-41d0c683-dd57-4540-92f2-daff88ec661d.png"
                         class="d-block w-100" alt="">
@@ -42,14 +44,42 @@
                 <span class="visually-hidden">Next</span>
             </button>
 
-            <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
-                <p class="text-center text-white m-3">
-                    NUEVOS CURSOS
-                </p>
-            </div>
+
 
         </div>
-
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
+                <p class="text-center text-white m-3">
+                    ULTIMOS CURSOS VISTOS
+                </p>
+            </div>
+            <div class="bg-light d-flex">
+                <!-- .NET Course -->
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="my-5">
+                            <img class="w-25 top-0"
+                                src="https://th.bing.com/th/id/OIP.FXkCxZPv-nYiNTYRxSm27AHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
+                                alt=".">
+                        </div>
+                        <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
+                            <small class="fw-bold">.NET - BÁSICO</small>
+                        </div>
+                        <br>
+                        <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
+                            class="btn btn-success fw-bold px-4 py-2 m-2">
+                            IR AL CURSO
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
+            <p class="text-center text-white m-3">
+                NUEVOS CURSOS
+            </p>
+        </div>
         <!-- Popular Courses Section -->
         <div class="card shadow-lg">
             <div class="card-body p-4">
@@ -60,7 +90,7 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="my-5">
-                                <img class="w-50 top-0"
+                                <img class="w-25 top-0"
                                     src="https://th.bing.com/th/id/OIP.FXkCxZPv-nYiNTYRxSm27AHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
                                     alt=".">
                             </div>
@@ -78,7 +108,7 @@
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="my-5 ">
-                                <img class="w-50 "
+                                <img class="w-25 p-1"
                                     src="https://th.bing.com/th/id/OIP.g4HM3XwYVd_UXSyE3438DwHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
                                     alt=".">
                             </div>
@@ -95,8 +125,8 @@
                     <!-- .NET Course -->
                     <div class="col-md-4">
                         <div class="text-center">
-                            <div class="my-5">
-                                <img class="w-75"
+                            <div class="my-5 p-3">
+                                <img class="w-25"
                                     src="https://th.bing.com/th/id/OIP._Lm_T3scKhVEVFC54gcRxwHaE8?w=246&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
                                     alt=".">
                             </div>
@@ -115,6 +145,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 
