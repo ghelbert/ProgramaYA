@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@model List<Curso>
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "ProgramaYA";
@@ -49,31 +50,36 @@
         </div>
         @if (SignInManager.IsSignedIn(User))
         {
-            <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
+
+            @* Verifica que el modelo no sea null y tenga datos *@
+@if (Model != null && Model.Count>0)
+{
+                <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
                 <p class="text-center text-white m-3">
                     ULTIMOS CURSOS VISTOS
                 </p>
             </div>
             <div class="bg-light d-flex">
                 <!-- .NET Course -->
-                <div class="col-md-4">
-                    <div class="text-center">
-                        <div class="my-5">
-                            <img class="w-25 top-0"
-                                src="https://th.bing.com/th/id/OIP.FXkCxZPv-nYiNTYRxSm27AHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3"
-                                alt=".">
+                @foreach(var item in Model){
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="my-5">
+                                    <img class="w-25 top-0" src="@item.Imagen" alt=".">
+                                </div>
+                                <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
+                                    <small class="fw-bold">@item.Nombre</small>
+                                </div>
+                                <br>
+                                <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
+                                    class="btn btn-success fw-bold px-4 py-2 m-2">
+                                    IR AL CURSO
+                                </a>
+                            </div>
                         </div>
-                        <div class="bg-success text-white py-2 px-3 rounded-pill d-inline-block mb-3">
-                            <small class="fw-bold">.NET - BÁSICO</small>
-                        </div>
-                        <br>
-                        <a href="@Url.Action("Index", "Catalogo", new { id = "dotnet-basico" })"
-                            class="btn btn-success fw-bold px-4 py-2 m-2">
-                            IR AL CURSO
-                        </a>
-                    </div>
-                </div>
+                }
             </div>
+            }
         }
         <div class="bg-dark fs-1 fw-bold w-auto top-0 d-flex align-items-center justify-content-center">
             <p class="text-center text-white m-3">

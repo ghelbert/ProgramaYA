@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ProgramaYA.Models;
+using System.Security.Claims;
 
 namespace ProgramaYA.Areas.Identity.Pages.Account
 {
@@ -118,8 +119,10 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var keyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var userId = user?.Id;
                     TempData["UserId"] = userId;
+                    TempData["KeyRedis"] = $"curso:{keyId}";
                     _logger.LogInformation("User logged in." + userId);
                     return LocalRedirect(returnUrl);
                 }
