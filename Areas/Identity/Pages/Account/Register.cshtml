@@ -57,8 +57,11 @@
                     <span asp-validation-for="Input.Apellidos" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.DNI" class="form-control" autocomplete="off" aria-required="true" placeholder="DNI" />
-                    <label asp-for="Input.DNI">DNI</label>
+                    <div class="d-flex gap-2 align-items-start">
+                        <input asp-for="Input.DNI" class="form-control" autocomplete="off" aria-required="true" placeholder="DNI" />
+                        <button id="btnObtenerDni" type="button" class="btn btn-outline-primary">Obtener</button>
+                    </div>
+                    
                     <span asp-validation-for="Input.DNI" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
@@ -93,4 +96,49 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function(){
+            const btn = document.getElementById('btnObtenerDni');
+            if (!btn) return;
+
+            btn.addEventListener('click', async function(){
+                const dniInput = document.querySelector('input[name="Input.DNI"]');
+                const nombresInput = document.querySelector('input[name="Input.Nombres"]');
+                const apellidosInput = document.querySelector('input[name="Input.Apellidos"]');
+                if (!dniInput) return alert('Campo DNI no encontrado');
+                const numero = dniInput.value && dniInput.value.trim();
+                if (!numero) return alert('Ingresa un DNI');
+
+                btn.disabled = true;
+                btn.innerText = 'Buscando...';
+                try {
+                    const resp = await fetch(`/api/reniec/dni?numero=${encodeURIComponent(numero)}`);
+                    if (!resp.ok) {
+                        const txt = await resp.text();
+                        console.error('RENIEC error', resp.status, txt);
+                        alert('No se pudo obtener datos del DNI');
+                        return;
+                    }
+                    const data = await resp.json();
+                    if (data.nombres) nombresInput.value = data.nombres;
+                    if (data.apellidos) apellidosInput.value = data.apellidos;
+                    // If server returned nested raw, try to populate from that
+                    if ((!data.nombres || !data.apellidos) && data.raw) {
+                        // try some common fields inside raw
+                        try {
+                            const raw = data.raw;
+                            if (!data.nombres && raw.nombres) nombresInput.value = raw.nombres;
+                            if (!data.apellidos && raw.apellidos) apellidosInput.value = raw.apellidos;
+                        } catch(e) { console.warn(e); }
+                    }
+                } catch (ex) {
+                    console.error(ex);
+                    alert('Error al consultar RENIEC');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = 'Obtener';
+                }
+            });
+        })();
+    </script>
 }

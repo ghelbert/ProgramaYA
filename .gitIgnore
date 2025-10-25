@@ -5,3 +5,4 @@ Data/Migrations/
 wwwroot/
 node_modules/
 Migrations/
+.env
