@@ -63,12 +63,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-secondary mx-5" href="#" onclick="goToMisCursos()">Mis cursos</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Mis APIS
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="">
+                                    <a class="nav-link text-secondary  dropdown-item"
+                                        href="@Url.Action("Index", "Noticias")">Noticias</a>
+                                </li>
+                                <li class="">
+                                    <a class="nav-link text-secondary  dropdown-item"
+                                        href="@Url.Action("Index", "Currency")">Currency</a>
+                                </li>
+                                <li class="">
+                                    <a class="nav-link text-secondary dropdown-item"
+                                        href="@Url.Action("Index", controller: "Weather")">Weather</a>
+                                </li>
+                            </ul>
+                        </li>
                     }
                     else
                     {
                     }
                 </ul>
-
             </div>
         </div>
         <partial name="_LoginPartial" />

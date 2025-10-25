@@ -1,0 +1,54 @@
+@model ProgramaYA.Models.Dto.WeatherViewModel
+
+@{
+    ViewData["Title"] = "Clima Actual";
+}
+
+<div class="container mt-4">
+    <h2>Clima actual</h2>
+
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label">Latitud</label>
+            <input name="lat" class="form-control" value="@Model.Lat" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Longitud</label>
+            <input name="lon" class="form-control" value="@Model.Lon" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Unidades</label>
+            <select name="units" class="form-select">
+                <option value="metric" selected="@(Model.Units=="metric"?"selected":null)">Metric</option>
+                <option value="imperial" selected="@(Model.Units=="imperial"?"selected":null)">Imperial</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Idioma</label>
+            <input name="lang" class="form-control" value="@Model.Lang" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" type="submit">Consultar</button>
+        </div>
+    </form>
+
+    <div class="mt-4">
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="alert alert-warning">Error: @Model.Error
+                <pre class="small mt-2">@Model.RawJson</pre>
+            </div>
+        }
+        else if (Model.Weather != null)
+        {
+            <div class="card p-3">
+                <h4>@Model.Weather.CityName</h4>
+                <p>@Model.Weather.Weather?.Description</p>
+                <p>Temperatura: <strong>@Model.Weather.Temp</strong></p>
+                <p>Humedad: <strong>@Model.Weather.RelativeHumidity</strong>%</p>
+                <p>Viento: <strong>@Model.Weather.WindSpeed</strong></p>                
+                <p>Country Code: <strong>@Model.Weather.Country_code</strong></p>
+            </div>
+        }
+    </div>
+</div>
