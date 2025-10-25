@@ -49,8 +49,10 @@ catch (Exception ex)
     Console.WriteLine($"Redis no disponible, usando cache en memoria: {ex.Message}");
 }
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>() // 🔹 importante si usas roles
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 // NewsAPI service registration
@@ -81,8 +83,21 @@ builder.Services.AddHttpClient<IWeatherService, WeatherService>(client =>
     if (!string.IsNullOrEmpty(rapidWeatherHost)) client.DefaultRequestHeaders.Add("x-rapidapi-host", rapidWeatherHost);
 });
 
+// APP
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roles = new[] { "Admin", "User" };
 
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -91,7 +106,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
     app.UseHsts();
 }
 app.UseHttpsRedirection();

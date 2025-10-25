@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using ProgramaYA.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject ProgramaYA.Areas.Identity.Data.ApplicationDbContext Db
 <!DOCTYPE html>
 <html lang="es">
 
@@ -58,7 +60,7 @@
                     <li class="nav-item">
                         <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "Catalogo")">Catalogo</a>
                     </li>
-                    @if (SignInManager.IsSignedIn(User))
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-secondary mx-5" href="#" onclick="goToMisCursos()">Mis cursos</a>
@@ -84,8 +86,15 @@
                             </ul>
                         </li>
                     }
+                    else if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary mx-5" href="@Url.Action("Todos", "MisCursos")">Mis cursos</a>
+                        </li>
+                    }
                     else
                     {
+
                     }
                 </ul>
             </div>
@@ -150,3 +159,50 @@
         }
     }
 </script>
+
+@{
+    List<Curso> misCursos = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        var userId = UserManager.GetUserId(User);
+        misCursos = Db.Suscripciones
+            .Where(s => s.UsuarioId == userId)
+            .Select(s => s.Curso)
+            .Where(c => c != null)
+            .ToList();
+    }
+}
+
+@if (misCursos != null && misCursos.Any())
+{
+    <div class="container mt-4 mb-4">
+        <h5 class="fw-bold">Mis Cursos</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Nivel</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var curso in misCursos)
+                {
+                    <tr>
+                        <td>@curso.Nombre</td>
+                        <td>@curso.Descripcion</td>
+                        <td>@curso.Nivel</td>
+                        <td>@(curso.Precio.HasValue ? curso.Precio.Value.ToString("C0") : "-")</td>
+                        <td>
+                            <a href="@Url.Action("Detalle", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-primary">Ver</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

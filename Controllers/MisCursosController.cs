@@ -18,6 +18,18 @@ public class MisCursosController : Controller
         _context = context;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Todos()
+    {
+        // Solo permitir acceso a administradores
+        if (!User.Identity.IsAuthenticated || !User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+        var cursos = await _context.Cursos.ToListAsync();
+        return View(cursos);
+    }
+
 
     public async Task<IActionResult> Index(string userId)
     {
