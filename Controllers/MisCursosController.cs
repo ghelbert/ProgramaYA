@@ -1,4 +1,5 @@
 
+
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,30 @@ public class MisCursosController : Controller
         _logger = logger;
         _context = context;
     }
+    [HttpGet]
+    public async Task<IActionResult> Eliminar(int id)
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        var curso = await _context.Cursos.FindAsync(id);
+        if (curso == null)
+            return NotFound();
+        return View(curso);
+    }
 
+    [HttpPost, ActionName("Eliminar")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EliminarConfirmado(int id)
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        var curso = await _context.Cursos.FindAsync(id);
+        if (curso == null)
+            return NotFound();
+        _context.Cursos.Remove(curso);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Todos");
+    }
     [HttpGet]
     public async Task<IActionResult> Editar(int id)
     {

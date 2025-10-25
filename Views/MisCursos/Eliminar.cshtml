@@ -1,0 +1,24 @@
+@model ProgramaYA.Models.Curso
+@{
+    ViewData["Title"] = "Eliminar Curso";
+}
+<div class="container mt-4 mb-4">
+    <h2 class="fw-bold text-danger">¿Estás seguro que deseas eliminar este curso?</h2>
+    <div class="mb-3">
+        <strong>Nombre:</strong> @Model.Nombre
+    </div>
+    <div class="mb-3">
+        <strong>Descripción:</strong> @Model.Descripcion
+    </div>
+    <div class="mb-3">
+        <strong>Nivel:</strong> @Model.Nivel
+    </div>
+    <div class="mb-3">
+        <strong>Precio:</strong> @(Model.Precio.HasValue ? Model.Precio.Value.ToString("C0") : "-")
+    </div>
+    <form asp-action="Eliminar" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="@Url.Action("Todos", "MisCursos")" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
