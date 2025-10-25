@@ -21,6 +21,11 @@
             <span asp-validation-for="Nivel" class="text-danger"></span>
         </div>
         <div class="mb-3">
+            <label asp-for="Imagen" class="form-label">Imagen</label>
+            <input asp-for="Imagen" class="form-control" required />
+            <span asp-validation-for="Imagen" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
             <label asp-for="Precio" class="form-label">Precio</label>
             <input asp-for="Precio" class="form-control" type="number" min="0" step="0.01" />
             <span asp-validation-for="Precio" class="text-danger"></span>
