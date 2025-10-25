@@ -23,19 +23,22 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-    private readonly SignInManager<ProgramaYA.Models.ApplicationUser> _signInManager;
-    private readonly UserManager<ProgramaYA.Models.ApplicationUser> _userManager;
-    private readonly IUserStore<ProgramaYA.Models.ApplicationUser> _userStore;
-    private readonly IUserEmailStore<ProgramaYA.Models.ApplicationUser> _emailStore;
+        private readonly SignInManager<ProgramaYA.Models.ApplicationUser> _signInManager;
+        private readonly UserManager<ProgramaYA.Models.ApplicationUser> _userManager;
+        private readonly IUserStore<ProgramaYA.Models.ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ProgramaYA.Models.ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ProgramaYA.Models.ApplicationUser> userManager,
             IUserStore<ProgramaYA.Models.ApplicationUser> userStore,
             SignInManager<ProgramaYA.Models.ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +46,7 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -122,7 +126,7 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+                await _userManager.AddToRoleAsync(user, "User");
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
