@@ -3,7 +3,10 @@
     ViewData["Title"] = "Todos los Cursos";
 }
 <div class="container mt-4 mb-4">
-    <h2 class="fw-bold">Todos los Cursos</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Todos los Cursos</h2>
+        <a href="@Url.Action("Agregar", "MisCursos")" class="btn btn-success">Añadir Curso</a>
+    </div>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead class="table-dark">

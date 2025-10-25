@@ -1,3 +1,4 @@
+
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,29 @@ public class MisCursosController : Controller
     {
         _logger = logger;
         _context = context;
+    }
+
+    [HttpGet]
+    public IActionResult Agregar()
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Agregar(Curso curso)
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        if (ModelState.IsValid)
+        {
+            _context.Cursos.Add(curso);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Todos");
+        }
+        return View(curso);
     }
 
     [HttpGet]
