@@ -20,6 +20,32 @@ public class MisCursosController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> Editar(int id)
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        var curso = await _context.Cursos.FindAsync(id);
+        if (curso == null)
+            return NotFound();
+        return View(curso);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Editar(Curso curso)
+    {
+        if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+            return Forbid();
+        if (ModelState.IsValid)
+        {
+            _context.Update(curso);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Todos");
+        }
+        return View(curso);
+    }
+
+    [HttpGet]
     public IActionResult Agregar()
     {
         if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
@@ -67,30 +93,5 @@ public class MisCursosController : Controller
             .ToListAsync();
 
         return View(cursos);
-    }
-    public async Task<IActionResult> Detalle(int id)
-    {
-        Curso? curso = await _context.Cursos
-        .Include(i => i.Capitulos)
-        .FirstOrDefaultAsync(i => i.Id == id);
-        foreach (var item in curso.Capitulos)
-        {
-            item.Video = CatalogoController.GetYouTubeVideoId(item.Video);
-        }
-        if (curso == null)
-        {
-            return NotFound();
-        }
-        return View(curso);
-    }
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
