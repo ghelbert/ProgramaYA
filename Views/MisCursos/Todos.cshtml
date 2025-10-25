@@ -28,6 +28,7 @@
                     <td>@(curso.Precio.HasValue ? curso.Precio.Value.ToString("C0") : "-")</td>
                     <td>
                         <a href="@Url.Action("Detalle", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-primary">Ver</a>
+                        <a href="@Url.Action("Editar", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-warning ms-1">Editar</a>
                     </td>
                 </tr>
             }
