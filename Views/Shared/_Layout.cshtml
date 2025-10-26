@@ -91,6 +91,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-secondary mx-5" href="@Url.Action("Todos", "MisCursos")">Mis cursos</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "MisClientes")">Mis
+                                Clientes</a>
+                        </li>
                     }
                     else
                     {
@@ -166,10 +170,10 @@
     {
         var userId = UserManager.GetUserId(User);
         misCursos = Db.Suscripciones
-            .Where(s => s.UsuarioId == userId)
-            .Select(s => s.Curso)
-            .Where(c => c != null)
-            .ToList();
+        .Where(s => s.UsuarioId == userId)
+        .Select(s => s.Curso)
+        .Where(c => c != null)
+        .ToList();
     }
 }
 
@@ -189,18 +193,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var curso in misCursos)
-                {
-                    <tr>
-                        <td>@curso.Nombre</td>
-                        <td>@curso.Descripcion</td>
-                        <td>@curso.Nivel</td>
-                        <td>@(curso.Precio.HasValue ? curso.Precio.Value.ToString("C0") : "-")</td>
-                        <td>
-                            <a href="@Url.Action("Detalle", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-primary">Ver</a>
-                        </td>
-                    </tr>
-                }
+                    @foreach (var curso in misCursos)
+                    {
+                        <tr>
+                            <td>@curso.Nombre</td>
+                            <td>@curso.Descripcion</td>
+                            <td>@curso.Nivel</td>
+                            <td>@(curso.Precio.HasValue? curso.Precio.Value.ToString("C0") : "-")</td>
+                            <td>
+                                <a href="@Url.Action("Detalle", "MisCursos", new { id = curso.Id })"
+                                    class="btn btn-sm btn-primary">Ver</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
