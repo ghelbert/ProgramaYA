@@ -1,0 +1,65 @@
+@model List<ApplicationUser>
+
+<div>
+    <h1 class="text-center mt-5 mb-5 fw-bold">MIS CLIENTES</h1>
+
+    <!-- Formulario de búsqueda -->
+    <div class="d-flex justify-content-center align-items-center">
+        <span class="me-5 align-middle fw-bold">BUSCAR: </span>
+        <input type="text" id="searchInput" class="form-control" style="width:20vw" placeholder="Buscar por nombre">
+    </div>
+
+    <div class="container mt-4 d-flex justify-content-center">
+        <table class="table border border-success" id="clientsTable">
+            <thead class="table-success fw-bold">
+                <tr class="font-bold">
+                    <td>NOMBRE COMPLETO</td>
+                    <td>DNI</td>
+                    <td>CORREO</td>
+                    <td>CELULAR</td>
+                    <td colspan="2" class="text-center">
+                        <a href="#">AGREGAR</a>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in Model)
+                {
+                    <tr>
+                        <td>@cliente.Nombres @cliente.Apellidos</td>
+                        <td>@cliente.DNI</td>
+                        <td>@cliente.Email</td>
+                        <td>@cliente.Celular</td>
+                        <td>
+                            <a href="#"> Editar</a>
+                        </td>
+                        <td>
+                            <a href="#">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Obtener el input de búsqueda y la tabla
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('clientsTable');
+    const rows = table.getElementsByTagName('tr');
+
+    // Función para filtrar los resultados
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.toLowerCase(); // Obtener el texto de búsqueda
+        for (let i = 1; i < rows.length; i++) { // Comienza en 1 para omitir el encabezado de la tabla
+            const cells = rows[i].getElementsByTagName('td');
+            const fullName = (cells[0].textContent || cells[0].innerText).toLowerCase(); // Combina nombre y apellidos
+            if (fullName.includes(query)) {
+                rows[i].style.display = ''; // Muestra la fila
+            } else {
+                rows[i].style.display = 'none'; // Oculta la fila si no coincide
+            }
+        }
+    });
+</script>
