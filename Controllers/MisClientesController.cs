@@ -27,6 +27,37 @@ namespace Repositorio.Controllers
             List<ApplicationUser> lista = await _context.Users.ToListAsync();
             return View(lista);
         }
+        [HttpGet]
+        public async Task<IActionResult> Editar(string id)
+        {
+            if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+                return Forbid();
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(ApplicationUser usuario)
+        {
+            if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+                return Forbid();
+            var usuarioExistente = await _context.Users.FindAsync(usuario.Id);
+
+            if (ModelState.IsValid)
+            {
+                usuarioExistente.Nombres = usuario.Nombres;
+                usuarioExistente.Apellidos = usuario.Apellidos;
+                usuarioExistente.DNI = usuario.DNI;
+                usuarioExistente.NormalizedUserName = usuario.NormalizedUserName;
+                usuarioExistente.Celular = usuario.Celular;
+                await _context.SaveChangesAsync();
+            }
+
+
+            return RedirectToAction("Index");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

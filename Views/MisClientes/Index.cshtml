@@ -28,10 +28,10 @@
                     <tr>
                         <td>@cliente.Nombres @cliente.Apellidos</td>
                         <td>@cliente.DNI</td>
-                        <td>@cliente.Email</td>
+                        <td>@cliente.NormalizedUserName</td>
                         <td>@cliente.Celular</td>
                         <td>
-                            <a href="#"> Editar</a>
+                            <a href="@Url.Action("Editar", "MisClientes", new { id = cliente.Id })">Editar</a>
                         </td>
                         <td>
                             <a href="#">Eliminar</a>
