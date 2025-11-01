@@ -1,14 +1,14 @@
 @model ApplicationUser
 
 <!-- Contenedor principal para centrar al medio -->
-<div style="height: 70vh; display: flex; justify-content: center; align-items: center;">
+<div style="height: 100vh; display: flex; justify-content: center; align-items: center; " class="bg-success">
 
     <!-- Contenedor del formulario -->
     <div >
 
-        <h1>EDITAR CLIENTE</h1>
+        <h1 class="text-white fw-bold">EDITAR CLIENTE</h1>
 
-        <form style="display:flex; flex-direction:column; gap:8px; width:100%;" asp-action="Editar" method="post">
+        <form class="text-light fw-semibold" style="display:flex; flex-direction:column; gap:8px; width:100%;" asp-action="Editar" method="post">
             <input asp-for="Id" type="hidden">
             <label asp-for="Nombres"></label>
             <input asp-for="Nombres" type="text"  >
@@ -25,7 +25,7 @@
             <label for="">CELULAR</label>
             <input asp-for="Celular" type="text"  >
 
-            <button type="submit">EDITAR</button>
+            <button class="btn btn-light " type="submit">EDITAR</button>
         </form>
     </div>
 

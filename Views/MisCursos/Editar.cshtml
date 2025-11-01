@@ -2,38 +2,42 @@
 @{
     ViewData["Title"] = "Editar Curso";
 }
-<div class="container mt-4 mb-4">
-    <h2 class="fw-bold">Editar Curso</h2>
-    <form asp-action="Editar" method="post">
-        <input type="hidden" asp-for="Id" />
-        <div class="mb-3">
-            <label asp-for="Nombre" class="form-label">Nombre</label>
-            <input asp-for="Nombre" class="form-control" required />
-            <span asp-validation-for="Nombre" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Descripcion" class="form-label">Descripción</label>
-            <textarea asp-for="Descripcion" class="form-control" required></textarea>
-            <span asp-validation-for="Descripcion" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Nivel" class="form-label">Nivel</label>
-            <input asp-for="Nivel" class="form-control" required />
-            <span asp-validation-for="Nivel" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Imagen" class="form-label">Imagen</label>
-            <input asp-for="Imagen" class="form-control" required />
-            <span asp-validation-for="Imagen" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Precio" class="form-label">Precio</label>
-            <input asp-for="Precio" class="form-control" type="number" min="0" step="0.01" />
-            <span asp-validation-for="Precio" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="@Url.Action("Todos", "MisCursos")" class="btn btn-secondary ms-2">Cancelar</a>
-    </form>
+<div class="bg-success" style="height:100vh">
+    <div class="container w-50 text-light fw-bold">
+        <h2 class="text-center pt-5">Editar Curso</h2>
+        <form asp-action="Editar" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label">Nombre</label>
+                <input asp-for="Nombre" class="form-control" required />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Descripcion" class="form-label">Descripción</label>
+                <textarea asp-for="Descripcion" class="form-control" required></textarea>
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Nivel" class="form-label">Nivel</label>
+                <input asp-for="Nivel" class="form-control" required />
+                <span asp-validation-for="Nivel" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Imagen" class="form-label">Imagen</label>
+                <input asp-for="Imagen" class="form-control" required />
+                <span asp-validation-for="Imagen" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Precio" class="form-label">Precio</label>
+                <input asp-for="Precio" class="form-control" type="number" min="0" step="0.01" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="flex justify-center" style="display:flex; justify-content: center;">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="@Url.Action("Todos", "MisCursos")" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
