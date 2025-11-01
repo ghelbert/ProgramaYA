@@ -88,7 +88,7 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Celular")]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(maximumLength: 9, ErrorMessage = "9 caracteres", MinimumLength = 9)]
             [Phone]
             public string Celular { get; set; }
 
@@ -98,7 +98,7 @@ namespace ProgramaYA.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(maximumLength: 9, ErrorMessage = "9 caracteres", MinimumLength = 9)]
+            
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }

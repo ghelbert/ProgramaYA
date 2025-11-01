@@ -58,7 +58,19 @@ namespace Repositorio.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(string userId)
+        {
+            if (!User?.Identity?.IsAuthenticated ?? true || !User.IsInRole("Admin"))
+                return Forbid();
+            var user = await _context.Users.FindAsync(userId);
 
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

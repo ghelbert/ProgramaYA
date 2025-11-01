@@ -2,38 +2,42 @@
 @{
     ViewData["Title"] = "Todos los Cursos";
 }
-<div class="container mt-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold">Todos los Cursos</h2>
-        <a href="@Url.Action("Agregar", "MisCursos")" class="btn btn-success">Añadir Curso</a>
+<div class=" bg-success">
+    <div class="d-flex justify-content-between align-items-center mb-3 ">
+        <h2 class="fw-bold mx-auto text-light pt-5">Todos los Cursos</h2>
+
     </div>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Nivel</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var curso in Model)
-            {
-                <tr>
-                    <td>@curso.Nombre</td>
-                    <td>@curso.Descripcion</td>
-                    <td>@curso.Nivel</td>
-                    <td>@(curso.Precio.HasValue ? curso.Precio.Value.ToString("C0") : "-")</td>
-                    <td>
-                        <a href="@Url.Action("Detalle", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-primary">Ver</a>
-                        <a href="@Url.Action("Editar", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-warning ms-1">Editar</a>
-                        <a href="@Url.Action("Eliminar", "MisCursos", new { id = curso.Id })" class="btn btn-sm btn-danger ms-1">Eliminar</a>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="table-responsive">
+        <a href="@Url.Action("Agregar", "MisCursos")" class="btn btn-success fw-bold text-success border bg-light  mb-2">Añadir Curso</a>
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Nivel</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var curso in Model)
+                    {
+                        <tr>
+                            <td>@curso.Nombre</td>
+                            <td>@curso.Descripcion</td>
+                            <td>@curso.Nivel</td>
+                            <td>@(curso.Precio.HasValue? curso.Precio.Value.ToString("C0") : "-")</td>
+                            <td>
+                                <a href="@Url.Action("Editar", "MisCursos", new { id = curso.Id })"
+                                    class="btn btn-sm btn-warning ms-1 mb-3">Editar</a>
+                                <a href="@Url.Action("Eliminar", "MisCursos", new { id = curso.Id })"
+                                    class="btn btn-sm btn-danger ms-1">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -1,56 +1,105 @@
 @model List<ApplicationUser>
-
-<div>
-    <h1 class="text-center mt-5 mb-5 fw-bold">MIS CLIENTES</h1>
+<style>
+    td{
+        vertical-align: middle;
+    }
+</style>
+<div class="bg-success" style="height: 100vh;">
+    <h1 class="text-center pt-5 text-light mb-5 fw-bold">MIS CLIENTES</h1>
 
     <!-- Formulario de búsqueda -->
     <div class="d-flex justify-content-center align-items-center">
-        <span class="me-5 align-middle fw-bold">BUSCAR: </span>
+        <span class="me-5 align-middle fw-bold text-light">BUSCAR: </span>
         <input type="text" id="searchInput" class="form-control" style="width:20vw" placeholder="Buscar por nombre">
     </div>
 
-    <div class="container mt-4 d-flex justify-content-center">
+    <div class="container mt-4 d-fjlex justify-content-center">
         <table class="table border border-success" id="clientsTable">
             <thead class="table-success fw-bold">
-                <tr class="font-bold">
+                <tr class="font-bold" style="text-align: center; align-items: center;">
                     <td>NOMBRE COMPLETO</td>
                     <td>DNI</td>
                     <td>CORREO</td>
                     <td>CELULAR</td>
                     <td colspan="2" class="text-center">
-                        <a href="#">AGREGAR</a>
                     </td>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var cliente in Model)
                 {
-                    <tr>
-                        <td>@cliente.Nombres @cliente.Apellidos</td>
+                    <tr style="text-align: center; align-items: center;">
+                        <td class="tdmc">@cliente.Nombres @cliente.Apellidos</td>
                         <td>@cliente.DNI</td>
                         <td>@cliente.NormalizedUserName</td>
                         <td>@cliente.Celular</td>
                         <td>
-                            <a href="@Url.Action("Editar", "MisClientes", new { id = cliente.Id })">Editar</a>
+                            <a href="@Url.Action("Editar", "MisClientes", new { id = cliente.Id })">
+                                <button class="btn btn-warning">
+                                    Editar
+                                </button>
+                            </a>
                         </td>
                         <td>
-                            <a href="#">Eliminar</a>
+                            <div class="modalValidacion"
+                                style=" display: none;
+                                                                                                                                                  position: fixed;
+                                                                                                                                                  top: 0;
+                                                                                                                                                  left: 0;
+                                                                                                                                                  width: 100%;
+                                                                                                                                                  height: 100%;
+                                                                                                                                                  background-color: rgba(0, 0, 0, 0.5);
+                                                                                                                                                  justify-content: center;
+                                                                                                                                                  align-items: center;">
+                                <div
+                                    style="background-color: white;
+                                                                                                                                                  padding: 20px;
+                                                                                                                                                  border-radius: 8px;
+                                                                                                                                                  text-align: center;">
+                                    <p>¿Estás seguro de que deseas eliminar este elemento?</p>
+                                    <form asp-action="Eliminar" method="post">
+                                        <input value="@cliente.Id" type="hidden" name="userId">
+                                        <button class="btn btn-danger my-2" type="submit" id="btnConfirmar">Sí,
+                                            eliminar</button>
+                                    </form>
+                                    <button class="btn btn-primary btnCancelar">Cancelar</button>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger btnEliminar">Eliminar</button>
+
+
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
 </div>
+
 
 <script>
     // Obtener el input de búsqueda y la tabla
     const searchInput = document.getElementById('searchInput');
     const table = document.getElementById('clientsTable');
     const rows = table.getElementsByTagName('tr');
+    const btnEliminar = document.getElementsByClassName('btnEliminar');
+    const modalValidacion = document.getElementsByClassName('modalValidacion');
+    const btnCancelar = document.getElementsByClassName('btnCancelar');
 
+    for (let i = 0; i < btnEliminar.length; i++) {
+        btnEliminar[i].addEventListener('click', function () {
+            modalValidacion[i].style.display = 'flex';
+        });
+    }
+    for (let i = 0; i < btnCancelar.length; i++) {
+        btnCancelar[i].addEventListener('click', function () {
+            modalValidacion[i].style.display = 'none';
+        });
+    }
     // Función para filtrar los resultados
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         const query = searchInput.value.toLowerCase(); // Obtener el texto de búsqueda
         for (let i = 1; i < rows.length; i++) { // Comienza en 1 para omitir el encabezado de la tabla
             const cells = rows[i].getElementsByTagName('td');
