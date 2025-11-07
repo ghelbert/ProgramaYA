@@ -1,3 +1,4 @@
+using apptienda.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Curso> Cursos { get; set; }
     public DbSet<Capitulo> Capitulos { get; set; }
     public DbSet<Suscripcion> Suscripciones { get; set; }
+    public DbSet<Comentario> Comentarios { get; set; }
     public DbSet<Pago> Pagos { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {

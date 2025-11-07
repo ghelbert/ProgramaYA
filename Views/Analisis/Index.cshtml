@@ -1,0 +1,229 @@
+@{
+    var cursos = ViewBag.Cursos as List<string>;
+    var positivos = ViewBag.Positivos as List<int>;
+    var cursos2 = ViewBag.Cursos2 as List<string>;
+    var negativos = ViewBag.Negativos as List<int>;
+}
+
+<div class="container-fluid bg-success min-vh-100 py-5">
+    <h1 class="text-center text-white fw-bold mb-5">REPORTERÍA DE RESEÑAS</h1>
+
+    <div class="bg-light shadow-lg rounded-4 p-5 mx-auto mb-5" style="max-width: 1000px;">
+        <h2 class="text-center fw-semibold mb-4 text-dark">Top 3 Cursos con Más Comentarios Positivos</h2>
+
+        <div class="d-flex justify-content-center">
+            <canvas id="graficoPositivos" style="max-width: 100%; height: 450px;"></canvas>
+        </div>
+    </div>
+    <div class="bg-light shadow-lg rounded-4 p-5 mx-auto" style="max-width: 1000px;">
+        <h2 class="text-center fw-semibold mb-4 text-dark">Top 3 Cursos con Más Comentarios Negativos</h2>
+
+        <div class="d-flex justify-content-center">
+            <canvas id="graficoNegativos" style="max-width: 100%; height: 450px;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+    const ctx = document.getElementById('graficoPositivos');
+    const ctx2 = document.getElementById('graficoNegativos');
+
+    const data = {
+        labels: @Html.Raw(Json.Serialize(cursos)),
+        datasets: [{
+            label: 'Comentarios Positivos',
+            data: @Html.Raw(Json.Serialize(positivos)),
+            backgroundColor: [
+                'rgba(46, 204, 113, 0.8)',
+                'rgba(39, 174, 96, 0.8)',
+                'rgba(88, 214, 141, 0.8)'
+            ],
+            borderColor: 'rgba(33, 97, 63, 1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            hoverBackgroundColor: [
+                'rgba(46, 204, 113, 1)',
+                'rgba(39, 174, 96, 1)',
+                'rgba(88, 214, 141, 1)'
+            ]
+        }]
+    };
+    const data2 = {
+        labels: @Html.Raw(Json.Serialize(cursos2)),
+        datasets: [{
+            label: 'Comentarios Negativos',
+            data: @Html.Raw(Json.Serialize(negativos)),
+            backgroundColor: [
+                'rgba(46, 204, 113, 0.8)',
+                'rgba(39, 174, 96, 0.8)',
+                'rgba(88, 214, 141, 0.8)'
+            ],
+            borderColor: 'rgba(33, 97, 63, 1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            hoverBackgroundColor: [
+                'rgba(46, 204, 113, 1)',
+                'rgba(39, 174, 96, 1)',
+                'rgba(88, 214, 141, 1)'
+            ]
+        }]
+    };
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#2c3e50',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Comentarios Positivos',
+                    color: '#2c3e50',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#2c3e50',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#1abc9c',
+                    borderWidth: 1,
+                },
+                datalabels: {
+                    color: '#000',
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#2c3e50',
+                        font: {
+                            size: 13,
+                            weight: '500'
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#2c3e50',
+                        stepSize: 1,
+                        precision: 0
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutBounce'
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: data2,
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#2c3e50',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Comentarios Negativos',
+                    color: '#2c3e50',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#2c3e50',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#1abc9c',
+                    borderWidth: 1,
+                },
+                datalabels: {
+                    color: '#000',
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#2c3e50',
+                        font: {
+                            size: 15,
+                            weight: '500'
+                        },
+                        callback: function (value) {
+                            // Divide etiquetas largas en varias líneas (cada 10 caracteres aprox)
+                            const label = this.getLabelForValue(value);
+                            return label.length > 15 ? label.match(/.{1,27}/g) : label;
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#2c3e50',
+                        stepSize: 1,
+                        precision: 0
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutBounce'
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+</script>

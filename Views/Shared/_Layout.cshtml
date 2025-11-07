@@ -60,10 +60,14 @@
                     <li class="nav-item">
                         <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "Catalogo")">Catalogo</a>
                     </li>
+
                     @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-secondary mx-5" href="#" onclick="goToMisCursos()">Mis cursos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "Comentario")">Reseñas</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -88,8 +92,21 @@
                     }
                     else if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-secondary mx-5" href="@Url.Action("Todos", "MisCursos")">Mis cursos</a>
+                        <li class="nav-item dropdown mx-5">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                CURSOS
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="">
+                                    <a class="nav-link text-secondary" href="@Url.Action("Todos", "MisCursos")">Mis
+                                        cursos</a>
+                                </li>
+                                <li class="">
+                                    <a class="nav-link text-secondary  dropdown-item"
+                                        href="@Url.Action("Index", "Analisis")">Reseñas</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-secondary mx-5" href="@Url.Action("Index", "MisClientes")">Mis
