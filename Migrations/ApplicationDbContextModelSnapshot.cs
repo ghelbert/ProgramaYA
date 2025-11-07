@@ -336,6 +336,37 @@ namespace ProgramaYA.Migrations
                     b.ToTable("Suscripciones");
                 });
 
+            modelBuilder.Entity("apptienda.Models.Comentario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CursoSeleccionado")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("curso_id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Etiqueta")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mensaje")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Puntuacion")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CursoSeleccionado");
+
+                    b.ToTable("t_comentario");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -429,6 +460,15 @@ namespace ProgramaYA.Migrations
                     b.Navigation("Curso");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("apptienda.Models.Comentario", b =>
+                {
+                    b.HasOne("ProgramaYA.Models.Curso", "Curso")
+                        .WithMany()
+                        .HasForeignKey("CursoSeleccionado");
+
+                    b.Navigation("Curso");
                 });
 
             modelBuilder.Entity("ProgramaYA.Models.ApplicationUser", b =>
