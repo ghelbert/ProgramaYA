@@ -1,0 +1,113 @@
+<div id="chatPopup">
+    <div id="chat-content" class="mb-3">
+        <strong>BOT</strong> <br>
+        ¿Hola, dime qué te gustaría aprender?
+    </div>
+
+    <!-- Bot Typing Indicator (Hidden by Default) -->
+    <div id="typing-indicator" class="text-secondary" style="display: none;">Bot escribiendo...</div>
+
+    <form id="chat-form" class="d-flex">
+        <textarea id="chat-input" name="userMessage" class="form-control me-2" required></textarea>
+        <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let sessionId = getSessionId();
+    fetchChatHistory(sessionId);
+
+    const chatForm = document.getElementById("chat-form");
+    const typingIndicator = document.getElementById("typing-indicator");
+
+    chatForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // ✅ Evita el refresh de la página
+
+        let userMessage = document.getElementById("chat-input").value.trim();
+        if (userMessage === "") return;
+
+        // Mostrar mensaje del usuario
+        appendMessage(`<strong>You:</strong> ${userMessage}`, "text-end alert alert-primary");
+
+        // Mostrar "Bot escribiendo..."
+        typingIndicator.style.display = "block";
+
+        // Enviar mensaje al servidor
+        $.ajax({
+            url: "/api/chat/",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userMessage: userMessage, sessionId: sessionId }),
+            success: function (data) {
+                console.log("Bot response:", data);
+                appendMessage(data.message ?? data, "alert alert-success");
+                typingIndicator.style.display = "none"; // ✅ ocultar al recibir respuesta
+            },
+            error: function (xhr, status, error) {
+                console.error("Chat request failed:", error);
+                appendMessage("Error comunicando con el bot.", "alert alert-danger");
+                typingIndicator.style.display = "none"; // ✅ ocultar si hay error
+            }
+        });
+
+        // Limpiar el input
+        document.getElementById("chat-input").value = "";
+    });
+});
+
+function fetchChatHistory(sessionId) {
+    $.ajax({
+        url: `/api/chat/${sessionId}`,
+        type: "GET",
+        contentType: "application/json",
+        success: function (data) {
+            console.log("Historial:", data);
+            data.forEach(function (messageObj) {
+                let className = messageObj.sender === "User"
+                    ? "text-end alert alert-primary"
+                    : "alert alert-success";
+                let message = messageObj.sender === "User"
+                    ? `<strong>You:</strong> ${messageObj.message}`
+                    : messageObj.message;
+                appendMessage(message, className);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("Chat history request failed:", error);
+            appendMessage("Error cargando historial de chat.", "alert alert-danger");
+        }
+    });
+}
+
+function appendMessage(message, className) {
+    const chatContent = document.getElementById("chat-content");
+    const msgDiv = document.createElement("div");
+    msgDiv.className = className;
+    msgDiv.innerHTML = message;
+    chatContent.appendChild(msgDiv);
+
+    // Auto-scroll al final
+    chatContent.scrollTop = chatContent.scrollHeight;
+}
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+            v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function getSessionId() {
+    let sessionId = localStorage.getItem("chatSessionId");
+    if (!sessionId) {
+        sessionId = generateUUID();
+        localStorage.setItem("chatSessionId", sessionId);
+    }
+    return sessionId;
+}
+</script>

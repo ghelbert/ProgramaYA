@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Suscripcion> Suscripciones { get; set; }
     public DbSet<Comentario> Comentarios { get; set; }
     public DbSet<Pago> Pagos { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
