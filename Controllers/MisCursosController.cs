@@ -53,6 +53,17 @@ public class MisCursosController : Controller
             return NotFound();
         return View(curso);
     }
+    [HttpGet]
+    public async Task<IActionResult> Detalle(int id)
+    {
+        var curso = await _context
+        .Cursos
+        .Include(i => i.Capitulos)
+        .FirstOrDefaultAsync(foda => foda.Id == id);
+        if (curso == null)
+            return NotFound();
+        return View(curso);
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]

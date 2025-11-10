@@ -6,6 +6,7 @@ using ProgramaYA.Services;
 using StackExchange.Redis;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using DotNetEnv;
+using SKWebChatBot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +55,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<SemanticKernelService>();
+builder.Services.AddScoped<ChatService>();
 // NewsAPI service registration
 builder.Services.AddHttpClient<INewsApiService, NewsApiService>(client =>
 {
